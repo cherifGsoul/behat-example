@@ -1,0 +1,15 @@
+{
+    "name": "root/shoper",
+    "authors": [
+        {
+            "name": "Cherif BOUCHELAGHEM",
+            "email": "bouchlaghem@allegorie.tv"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "behat/behat": "^3.3",
+        "phpspec/phpspec": "^3.4"
+    },
+    "autoload": {"psr-0": {"": "src"}}
+}
