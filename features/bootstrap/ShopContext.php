@@ -13,6 +13,7 @@ class ShopContext implements Context
     private $catalog;
     private $productPricer;
     private $shop;
+    private $product;
     
     /**
      * Initializes context.
@@ -52,15 +53,6 @@ class ShopContext implements Context
     }
 
     /**
-     * @Given there's a product named :productName in the catalog
-     */
-    public function theresAProductNamedInTheCatalog(ProductName $productName)
-    {
-        $product = Product::named($productName);
-        $this->catalog->add($product);
-    }
-
-    /**
      * @Given I have a shop named :shopName
      */
     public function iHaveAShopNamed(ShopName $shopName)
@@ -69,18 +61,75 @@ class ShopContext implements Context
     }
 
     /**
-     * @When I add :productName priced DZD :price to my shop from the catalog
+     * @Given there's a product named :productName
      */
-    public function iAddPricedDzdToMyShopFromTheCatalog(ProductName $productName, Price $price)
+    public function theresAProductNamed(ProductName $productName)
     {
-        $this->productPricer->priceProductForShop($productName,$price,$this->shop);
+        $this->product = Product::named($productName);
     }
 
     /**
-     * @Then the count of my shop products will be :count
+     * @Given this product is listed in the catalog
      */
-    public function theCountOfMyShopProductsWillBe($count)
+    public function thisProductIsListedInTheCatalog()
     {
-        assert($this->shop->count() == $count);
+        $this->catalog->listProduct($this->product);
+    }
+
+    /**
+     * @Given this product is not listed on my shop priced products
+     */
+    public function thisProductIsNotListedOnMyShopPricedProducts()
+    {
+        $this->productPricer->unlistProductFromShop($this->shop,$this->product);
+    }
+
+    /**
+     * @When I add this product priced DZD :price to my shop from the catalog
+     */
+    public function iAddThisProductPricedDzdToMyShopFromTheCatalog(Price $price)
+    {
+        $this->productPricer->listProductForShop($this->product,$price,$this->shop);
+    }
+
+    /**
+     * @Then the this product will be available in my shop priced products
+     */
+    public function theThisProductWillBeAvailableInMyShopPricedProducts()
+    {
+        assert($this->shop->hasProduct($this->product));
+    }
+
+    /**
+     * @Given A shop registration for the free offer was requested with the following information:
+     */
+    public function aShopRegistrationForTheFreeOfferWasRequestedWithTheFollowingInformation(TableNode $table)
+    {
+        foreach($table as $row) {
+            $shopName = ShopName::fromString($row['shopName']);
+            $mobile = Mobile::fromString($row['mobile']);
+            $address = new Address($row['address_street'],$row['address_wilaya'], $row['address_city']);
+            $contactInformation = new ContactInformation($mobile,$address);
+            $offer = Offer::free();
+
+            $shop = Shop::register($shopName, $contactInformation,$offer);
+            $this->shops->list($shop);
+        }
+    }
+    
+    /**
+     * @Then the shop enblement will be marked as enabled
+     */
+    public function theShopEnblementWillBeMarkedAsEnabled()
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then the duration of this enablement will be three months from now
+     */
+    public function theDurationOfThisEnablementWillBeThreeMonthsFromNow()
+    {
+        throw new PendingException();
     }
 }

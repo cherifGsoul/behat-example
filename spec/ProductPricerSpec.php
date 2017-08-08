@@ -27,7 +27,7 @@ class ProductPricerSpec extends ObjectBehavior
         $price = Price::fromString('50000');
         $shop = Shop::named(ShopName::fromString('A shop'));
         $productCatalog->forName(ProductName::fromString('A product'))->willReturn($product);
-        $this->priceProductForShop(ProductName::fromString('A product'),$price,$shop);
+        $this->listProductForShop($product,$price,$shop);
         
     }
 }

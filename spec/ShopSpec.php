@@ -39,5 +39,23 @@ class ShopSpec extends ObjectBehavior
         $this->shouldHaveCount(1);
     }
 
+    function it_knows_if_it_has_a_product()
+    {
+        $this->beConstructedNamed(ShopName::fromString('A shop'));
+        $product = Product::named(ProductName::fromString('A product'));
+        $this->addPricedProduct($product, Price::fromString('50000'));
+        $this->shouldHaveProduct($product);
+    }
+
+    function it_unlists_product_from_priced_product()
+    {
+        $this->beConstructedNamed(ShopName::fromString('A shop'));
+        $product = Product::named(ProductName::fromString('A product'));
+        $this->addPricedProduct($product, Price::fromString('50000'));
+        $this->unlistProduct($product);
+        $this->shouldNotHaveProduct($product);
+
+    }
+
 
 }

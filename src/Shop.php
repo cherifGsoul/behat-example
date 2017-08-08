@@ -8,7 +8,7 @@ class Shop implements \Countable
     private function __construct(ShopName $shopName)
     {
         $this->shopName = $shopName;
-        $this->products = [];
+        $this->products = new \SplObjectStorage;
     }
 
     public static function named(ShopName $shopName)
@@ -24,7 +24,7 @@ class Shop implements \Countable
 
     public function addPricedProduct(Product $product, Price $price)
     {
-        $this->products[] = PricedProduct::pricedForShop($product, $price, $this);
+        $this->products->offsetSet($product,PricedProduct::pricedForShop($product, $price, $this));
     }
 
     public function hasProducts()
@@ -34,11 +34,21 @@ class Shop implements \Countable
 
     public function count()
     {
-        return count($this->products);
+        return $this->products->count();
     }
 
     public function sameAs(Shop $other)
     {
        return (string) $this == (string) $other;
+    }
+
+    public function hasProduct(Product $product)
+    {
+        return $this->products->offsetExists ($product);
+    }
+
+    public function unlistProduct(Product $product)
+    {
+        $this->products->offsetUnset($product);
     }
 }

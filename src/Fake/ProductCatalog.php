@@ -6,7 +6,7 @@ class ProductCatalog implements \ProductCatalog
 {
     private $products = [];
 
-    public function add(\Product $product)
+    public function listProduct(\Product $product)
     {
         $this->products[(string)$product] = $product;
     }

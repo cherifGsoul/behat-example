@@ -9,9 +9,18 @@ class ProductPricer
         $this->productCatalog = $productCatalog;
     }
 
-    public function priceProductForShop(ProductName $productName, Price $price, Shop $shop)
+    public function listProductForShop(Product $product, Price $price, Shop $shop)
     {
-        $product = $this->productCatalog->forName((string)$productName);
-        $shop->addPricedProduct($product,$price);
+        if ($shop->hasProduct($product) === false) {
+            $product = $this->productCatalog->forName((string)$product);
+            $shop->addPricedProduct($product,$price);
+        }
+    }
+
+    public function unlistProductFromShop(Shop $shop, Product $product)
+    {
+        if ($shop->hasProduct($product)) {
+            $shop->unlistProduct($product);
+        }
     }
 }

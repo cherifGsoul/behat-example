@@ -6,7 +6,9 @@
             "email": "bouchlaghem@allegorie.tv"
         }
     ],
-    "require": {},
+    "require": {
+        "php": ">=5.6"
+    },
     "require-dev": {
         "behat/behat": "^3.3",
         "phpspec/phpspec": "^3.4"
