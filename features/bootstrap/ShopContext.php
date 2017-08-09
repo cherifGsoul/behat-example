@@ -14,6 +14,7 @@ class ShopContext implements Context
     private $productPricer;
     private $shop;
     private $product;
+    private $shops;
     
     /**
      * Initializes context.
@@ -26,6 +27,7 @@ class ShopContext implements Context
     {
         $this->catalog = new \Fake\ProductCatalog;
         $this->productPricer = new \ProductPricer($this->catalog);
+        $this->shops = new \Fake\Shops;
     }
 
     /** 
@@ -101,28 +103,29 @@ class ShopContext implements Context
     }
 
     /**
-     * @Given A shop registration for the free offer was requested with the following information:
+     * @When offer free shops orders is registered with the following information:
      */
-    public function aShopRegistrationForTheFreeOfferWasRequestedWithTheFollowingInformation(TableNode $table)
+    public function offerFreeShopsOrdersIsRegisteredWithTheFollowingInformation(TableNode $table)
     {
-        foreach($table as $row) {
-            $shopName = ShopName::fromString($row['shopName']);
+        foreach ($table as $row) {
+            $shopName = ShopName::fromString($row['shop_name']);
             $mobile = Mobile::fromString($row['mobile']);
-            $address = new Address($row['address_street'],$row['address_wilaya'], $row['address_city']);
+            $address = new Address($row['address_street'],$row['address_wilaya'],$row['address_city']);
             $contactInformation = new ContactInformation($mobile,$address);
-            $offer = Offer::free();
-
-            $shop = Shop::register($shopName, $contactInformation,$offer);
-            $this->shops->list($shop);
+            $shop = Shop::registerForFree($shopName, $contactInformation );
+            $this->shops->add($shop);
         }
     }
-    
+
     /**
-     * @Then the shop enblement will be marked as enabled
+     * @Then the shop enablement will be marked as enabled
      */
-    public function theShopEnblementWillBeMarkedAsEnabled()
+    public function theShopEnablementWillBeMarkedAsEnabled()
     {
-        throw new PendingException();
+        $shops = $this->all();
+        foreach ($this->shops->all() as $shop) {
+            assert($shop->isEnabled() == true);
+        }
     }
 
     /**

@@ -11,11 +11,19 @@ class Shop implements \Countable
         $this->products = new \SplObjectStorage;
     }
 
-    public static function named(ShopName $shopName)
+    public static function registerForFree(ShopName $shopName, ContactInformation $contactInformation)
+    {
+        $enablement = Enablement::forFreeOffer();
+        $shop = new Shop($shopName, $contactInformation, $enablement);
+
+        return $shop;
+    }
+
+    /*public static function named(ShopName $shopName)
     {
         $shop = new Shop($shopName);
         return $shop;
-    }
+    }*/
 
     public function __toString()
     {
@@ -50,5 +58,10 @@ class Shop implements \Countable
     public function unlistProduct(Product $product)
     {
         $this->products->offsetUnset($product);
+    }
+
+    public function isEnabled()
+    {
+        return $this->enablement->isEnabled();
     }
 }
