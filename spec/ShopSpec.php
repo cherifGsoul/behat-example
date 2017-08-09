@@ -7,12 +7,16 @@ use ShopName;
 use ProductName;
 use Product;
 use Price;
+use Mobile;
+use Address;
+use Enablement;
+use ContactInformation;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
 class ShopSpec extends ObjectBehavior
 {
-    function it_should_be_named()
+    /*function it_should_be_named()
     {
         $this->beConstructedNamed(ShopName::fromString('A shop'));
         $this->__toString()->shouldReturn('A shop');
@@ -55,6 +59,16 @@ class ShopSpec extends ObjectBehavior
         $this->unlistProduct($product);
         $this->shouldNotHaveProduct($product);
 
+    }*/
+
+    function it_can_be_registred_for_free()
+    {
+        $shopName = ShopName::fromString('Great shop');
+        $mobile = Mobile::fromString('0774804851');
+        $address = new Address('nowhere he we go','23','El Bouni');
+        $contactInformation = new ContactInformation($mobile,$address);
+        $this->beConstructedRegisterForFree($shopName,$contactInformation);
+        $this->shouldBeEnabled();
     }
 
 

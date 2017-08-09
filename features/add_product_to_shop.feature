@@ -4,6 +4,7 @@ Feature: Add product to the shop
    As a shop owner
    I need to be able to add products to my shop
 
+   @notesting
    Scenario: Add product
     Given I have a shop named "Great shop"
     And there's a product named "Samsung S8" 
